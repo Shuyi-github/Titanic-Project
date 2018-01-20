@@ -9,7 +9,7 @@ Created on Sat Jan 13 20:20:10 2018
 import numpy as  np
 import pandas as pd
 import matplotlib.pyplot as plt
-
+from predictage import set_missing_age
 
 
 
@@ -34,14 +34,25 @@ plt.ylabel(u"人数")
 plt.show()
 
 #print(train.Age.value_counts())
-age=train.Age.value_counts()
-print(age.sort_index())
+age=train.Age.isnull()
+print(age.sum())
 sur=train.Age[train.Survived == 1].value_counts()
-mature=train.Age[(train.Age <= 30) & (train.Age >=18)]
 
-print(sur.sort_index())
-print(mature.sort_index())
-print(train.Age)
+fig = plt.figure()
+old_0=(train.Age[train.Survived == 0])[train.Age >= 50].shape[0]
+old_1=(train.Age[train.Survived == 1])[train.Age >= 50].shape[0]
+mature_1=(train.Age[train.Survived == 1])[(train.Age <= 50) & (train.Age >=18)].shape[0]
+mature_0=(train.Age[train.Survived == 0])[(train.Age <= 50) & (train.Age >=18)].shape[0]
+df=pd.DataFrame({u'获救':[1,mature_1], u'未获救':[1,mature_0]})
+df.plot(kind='bar', stacked=True)
+plt.show()
+
+fig=plt.figure()
+cabin_0=(train.Cabin.isnull())[train.Survived == 0].value_counts()
+cabin_1=train.Cabin.notnull()[train.Survived ==1].value_counts()
+
+train_new=set_missing_age(train)
+
 
 df1=pd.DataFrame(train.Age)
 df2=df1.dropna(axis=0,how='any') # 0: 对行进行操作; 1: 对列进行操作'any': 只要存在 NaN 就 drop 掉; 'all': 必须全部是 NaN 才 drop 
