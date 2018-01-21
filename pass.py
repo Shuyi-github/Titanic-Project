@@ -9,7 +9,7 @@ Created on Sat Jan 13 20:20:10 2018
 import numpy as  np
 import pandas as pd
 import matplotlib.pyplot as plt
-from predictage import set_missing_age
+from setmissingval import set_missing_age, set_missing_embarkinfo
 
 
 
@@ -51,8 +51,15 @@ fig=plt.figure()
 cabin_0=(train.Cabin.isnull())[train.Survived == 0].value_counts()
 cabin_1=train.Cabin.notnull()[train.Survived ==1].value_counts()
 
-train_new=set_missing_age(train)
+train=set_missing_age(train)  #补全age缺失值。用randomforest做回归拟合
+train=set_missing_embarkinfo(train)  #补全embarked。只缺了两个，补了占比做多的登陆信息
 
+dummies_Embarked = pd.get_dummies(train['Embarked'], prefix= 'Embarked')
+dummies_Sex = pd.get_dummies(train['Sex'], prefix= 'Sex')
+dummies_Pclass = pd.get_dummies(train['Pclass'], prefix= 'pclass')
 
 df1=pd.DataFrame(train.Age)
 df2=df1.dropna(axis=0,how='any') # 0: 对行进行操作; 1: 对列进行操作'any': 只要存在 NaN 就 drop 掉; 'all': 必须全部是 NaN 才 drop 
+
+
+print (train[["Pclass", "Survived"]].groupby(['Pclass'], as_index=False).mean())

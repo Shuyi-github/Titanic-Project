@@ -25,3 +25,6 @@ def set_missing_age(df):
     #print(regr.feature_importances_)
     return df
     
+def set_missing_embarkinfo(df):
+    df['Embarked'] = df['Embarked'].fillna('S')
+    return df
