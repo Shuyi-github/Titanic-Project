@@ -51,10 +51,14 @@ fig=plt.figure()
 cabin_0=(train.Cabin.isnull())[train.Survived == 0].value_counts()
 cabin_1=train.Cabin.notnull()[train.Survived ==1].value_counts()
 
-
+print(train[train['Embarked'].isnull()])
+print(train.Embarked[(train['Fare']>=70.0)&(train['Fare']<=90.0)&(train['Pclass']==1)&(train['Cabin'].str.contains('B'))])
 
 df1=pd.DataFrame(train.Age)
 df2=df1.dropna(axis=0,how='any') # 0: 对行进行操作; 1: 对列进行操作'any': 只要存在 NaN 就 drop 掉; 'all': 必须全部是 NaN 才 drop 
 
 
 print (train[["Pclass", "Survived"]].groupby(['Pclass'], as_index=False).mean())
+test_missval=(test.Fare.isnull()).value_counts()
+
+train['']

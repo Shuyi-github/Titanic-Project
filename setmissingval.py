@@ -5,7 +5,7 @@ Created on Tue Jan 16 17:14:31 2018
 
 @author: TANG
 """
-
+import re as re
 from sklearn.ensemble import RandomForestRegressor
 
 def set_missing_age(df,test):
@@ -31,3 +31,24 @@ def set_missing_age(df,test):
 def set_missing_embarkinfo(df):
     df['Embarked'] = df['Embarked'].fillna('S')
     return df
+
+def set_missing_fare(df):
+    Mean=df['Fare'].mean()
+    df['Fare'] = df['Fare'].fillna(Mean)
+    return df
+
+def get_title(name):
+    title_search = re.search(' ([A-Za-z]+)\.', name)
+    # If the title exists, extract and return it.
+    if title_search:
+        return title_search.group(1)
+    return ""
+
+def get_cabin(cabin):
+    if isinstance (cabin,str):
+        cabin_num=re.search('(\w)\d+',cabin)
+        if cabin_num:
+            return cabin_num.group(1)
+    return 0
+    
+    
